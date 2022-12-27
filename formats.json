@@ -1,0 +1,85 @@
+[
+    {
+        "name": "+documents",
+        "formats": [
+            ".pdf",
+            ".epub",
+            ".txt",
+            ".doc",
+            ".docx",
+            ".odt",
+            ".rtf"
+        ]
+    },
+    {
+        "name": "+presentations",
+        "formats": [
+            ".odp",
+            ".ppsx",
+            ".pptx"
+        ]
+    },
+    {
+        "name": "+tables",
+        "formats": [
+            ".ods",
+            ".csv",
+            ".xls",
+            ".xlsx"
+        ]
+    },
+    {
+        "name": "+images",
+        "formats": [
+            ".png",
+            ".bmp",
+            ".jpg",
+            ".jpeg",
+            ".gif",
+            ".svg"
+        ]
+    },
+    {
+        "name": "+videos",
+        "formats": [
+            ".avi",
+            ".mp4",
+            ".mwv",
+            ".mpeg"
+        ]
+    },
+    {
+        "name": "+audio",
+        "formats": [
+            ".mp3",
+            ".wav",
+            ".wma"
+        ]
+    },
+    {
+        "name": "+ziped",
+        "formats": [
+            ".iso",
+            ".rar",
+            ".tar",
+            ".zip",
+            ".gz"
+        ]
+    },
+    {
+        "name": "?check to delete",
+        "formats": [
+            ".tmp"
+        ]
+    },
+    {
+        "name": "+programming",
+        "formats": [
+            ".py",
+            ".js",
+            ".bat",
+            ".c",
+            ".cpp"
+        ]
+    }
+]
