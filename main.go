@@ -3,13 +3,11 @@ package main
 import (
 	"embed"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 type Directory struct {
@@ -34,68 +32,58 @@ func errorHandler(e error, msg string) {
 }
 
 func loadDir() {
-	fmt.Print("loading formats")
+	fmt.Print("💫 loading formats")
 	// if you don't want embed the json. And just read it when execute the program, you can change this line for:
 	// b, err := os.ReadFile("formats.json")
 	b, err := embedJson.ReadFile("formats.json")
 	errorHandler(err, "can't read .json")
 	e := json.Unmarshal(b, &directories)
 	errorHandler(e, "can't convert .json")
-	fmt.Println(".json read successfully")
-}
-
-func exten(file fs.DirEntry) (string, error) {
-	if !file.IsDir() {
-		var tipo string
-		var ext []string = strings.Split(file.Name(), ".")
-		tipo = "." + ext[len(ext)-1]
-		tipo = strings.ToLower(tipo)
-		return tipo, nil
-	}
-	if file.IsDir() {
-		return "", nil
-	}
-	return file.Name(), errors.New("\n❗It isn't a directory and isn't a file 🤔")
+	fmt.Println(".json read successfully 📖")
 }
 
 func guardar(obj *Directory, file fs.DirEntry) {
-	ext, fail := exten(file)
-	errorHandler(fail, "can't determinate extension")
+
 	for _, extension := range obj.Formats {
-		if extension == ext {
-			here, _ := os.Getwd()
-			err := os.MkdirAll(obj.Name, os.ModePerm)
-			errorHandler(err, "can't create directory")
-			oldPath := filepath.Join(here, file.Name())
-			var newPath string = filepath.Join(here, obj.Name, file.Name())
-			err = os.Rename(oldPath, newPath)
-			errorHandler(err, "can't move directory")
+		if !file.IsDir() {
+			if extension == filepath.Ext(file.Name()) {
+				here, _ := os.Getwd()
+				err := os.MkdirAll(obj.Name, os.ModePerm)
+				errorHandler(err, "can't create directory")
+				oldPath := filepath.Join(here, file.Name())
+				var newPath string = filepath.Join(here, obj.Name, file.Name())
+				err = os.Rename(oldPath, newPath)
+				errorHandler(err, "can't move directory")
+				fmt.Printf("👍 '%s' saved correctly in [./%s]\n", file.Name(), newPath)
+			}
 		}
 	}
 }
 
-func readingDir(de []fs.DirEntry) {
-	for _, d := range de {
-		if d.IsDir() {
-			info, _ := d.Info()
-			files, _ := os.ReadDir(info.Name())
-			if len(files) == 0 {
-				os.Remove(info.Name())
-			}
+func cleanEmtydirs(file fs.DirEntry) {
+	if file.IsDir() {
+		info, err := file.Info()
+		errorHandler(err, "I don't know what is this")
+		files, err := os.ReadDir(info.Name())
+		errorHandler(err, "I can't read it. Is this a directory?")
+		if len(files) == 0 {
+			os.Remove(info.Name())
+			fmt.Printf("💢 The empty directory %s was deleted\n", info.Name())
 		}
 	}
 }
 
 func main() {
 	files, e := os.ReadDir(".")
+	for _, v := range files {
+		cleanEmtydirs(v)
+	}
 	errorHandler(e, "can't read current directory")
 	loadDir()
 	for i := 0; i < len(directories); i++ {
 		for _, file := range files {
 			guardar(&directories[i], file)
-			fmt.Printf("'%s' saved correctly in [./%s]", file.Name(), directories[i].Name)
 		}
 	}
-	readingDir(files)
 	fmt.Println("We have finished 🙃")
 }
