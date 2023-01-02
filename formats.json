@@ -36,7 +36,8 @@
             ".jpg",
             ".jpeg",
             ".gif",
-            ".svg"
+            ".svg",
+            ".webp"
         ]
     },
     {
