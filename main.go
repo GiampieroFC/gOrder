@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type Directory struct {
@@ -46,7 +47,7 @@ func guardar(obj *Directory, file fs.DirEntry) {
 
 	for _, extension := range obj.Formats {
 		if !file.IsDir() {
-			if extension == filepath.Ext(file.Name()) {
+			if extension == strings.ToLower(filepath.Ext(file.Name())) {
 				here, _ := os.Getwd()
 				err := os.MkdirAll(obj.Name, os.ModePerm)
 				errorHandler(err, "can't create directory")
