@@ -81,12 +81,6 @@ func readingDir(de []fs.DirEntry) {
 			files, _ := os.ReadDir(info.Name())
 			if len(files) == 0 {
 				os.Remove(info.Name())
-			} else {
-				filepath, _ := filepath.Abs(info.Name())
-				os.Chdir(filepath)
-				readingDir(files)
-				os.Chdir("..")
-				readingDir(files)
 			}
 		}
 	}
@@ -96,13 +90,12 @@ func main() {
 	files, e := os.ReadDir(".")
 	errorHandler(e, "can't read current directory")
 	loadDir()
-	readingDir(files)
 	for i := 0; i < len(directories); i++ {
 		for _, file := range files {
 			guardar(&directories[i], file)
 			fmt.Printf("'%s' saved correctly in [./%s]", file.Name(), directories[i].Name)
 		}
 	}
-	fmt.Println("We have finished 🙃")
 	readingDir(files)
+	fmt.Println("We have finished 🙃")
 }
