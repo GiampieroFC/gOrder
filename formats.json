@@ -54,6 +54,7 @@
         "formats": [
             ".mp3",
             ".wav",
+            ".ogg",
             ".wma"
         ]
     },
